@@ -1,0 +1,25 @@
+# Deleting relational data
+# 1. SET_NULL (default) will make it null (not gonna delete)
+# 2. CASCADE will delete
+
+type User {
+  id: ID! @unique
+  username: String! @unique
+  review: [Review!]! @relation(name: "ReviewToUser", onDelete: CASCADE)
+}
+
+type Book {
+  id: ID! @unique
+  title: String!
+  author: String!
+  isbn: String!
+  review: [Review!]! @relation(name: "ReviewToBook", onDelete: CASCADE)
+}
+
+type Review {
+  id: ID! @unique
+  text: String!
+  rating: Int!
+  book: Book! @relation(name: "ReviewToBook", onDelete: SET_NULL)
+  user: User! @relation(name: "ReviewToUser", onDelete: SET_NULL)
+}

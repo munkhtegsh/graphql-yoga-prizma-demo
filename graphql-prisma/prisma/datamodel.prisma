@@ -1,0 +1,27 @@
+# Deleting relational data
+# 1. SET_NULL (default)
+# 2. CASCADE
+
+type User {
+  id: ID! @unique
+  name: String!
+  email: String! @unique
+  post: [Post!]! @relation(name: "PostToUser", onDelete: CASCADE) #use name in Post and Comment
+  comments: [Comment!]! @relation(name: "CommentToUser", onDelete: CASCADE)
+}
+
+type Post {
+  id: ID! @unique
+  title: String!
+  body: String!
+  published: Boolean!
+  author_id: User! @relation(name: "PostToUser", onDelete: SET_NULL) # don't want to delete auther so stick with default (SET_NULL)
+  comments: [Comment!]! @relation(name: "CommentToPost", onDelete: CASCADE)
+}
+
+type Comment {
+  id: ID! @unique
+  text: String!
+  author_id: User! @relation(name: "CommentToUser", onDelete: SET_NULL)
+  post_id: Post! @relation(name: "CommentToPost", onDelete: SET_NULL)
+}

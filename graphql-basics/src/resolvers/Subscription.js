@@ -17,8 +17,8 @@ const Subscription = {
 
   comment: {
     subscribe(parent, {postId}, {db, pubsub}, info) {
-      console.log(args);
-      return pubsub.asyncIterator(`comment`);
+      console.log(postId);
+      return pubsub.asyncIterator(`comment ${postId}`);
     },
   },
 
