@@ -1,44 +1,49 @@
 // setting up some dummy data for users and posts
+//
 const users = [
   {
     id: '1',
-    username: 'Potter',
+    name: 'Potter',
+    email: 'potter@gmail.com',
+    password: 'jkfdsjfssd',
   },
   {
     id: '2',
-    username: 'Hermony',
+    name: 'Hermony',
+    email: 'hermony@yahoo.com',
+    password: 'erewwaq',
   },
 ];
 
-const books = [
+const posts = [
+  {
+    id: '10',
+    title: 'Potter defeated Voldimort',
+    body: 'Blalallalala ....',
+    published: true,
+    author_id: '1',
+  },
   {
     id: '11',
-    title: 'Potter defeated Voldimort',
-    author: '1',
-    review: '1'
-  },
-  {
-    id: '12',
     title: 'Hermony won the contest',
-    author: '2',
-    review: '2'
+    body: 'Wooohooo....',
+    published: false,
+    author_id: '2',
   },
 ];
 
-const reviews = [
+const comments = [
   {
     id: '1',
-    text: 'Potter wrote his FIRST review',
-    rating: 4,
-    book: '11',
-    author: '1'
+    text: 'Potter wrote his FIRST comment',
+    author_id: '1',
+    post_id: '10',
   },
   {
     id: '2',
-    text: 'Hermany wrote her review',
-    rating: 5,
-    book: '12',
-    author: '2'
+    text: 'Potter wrote his SECOND comment',
+    author_id: '1',
+    post_id: '11',
   },
   {
     id: '3',
@@ -56,8 +61,8 @@ const reviews = [
 
 const db = {
   users,
-  books,
-  reviews,
+  posts,
+  comments,
 };
 
 export {db as default};

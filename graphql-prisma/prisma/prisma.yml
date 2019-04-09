@@ -1,2 +1,9 @@
 endpoint: http://localhost:4466
 datamodel: datamodel.prisma
+secret: thisismysupersecrettest # for token, see line 6 in prisma.js
+
+# use below code in graphiql
+# can get the token code go to prisma dir and prisma token
+# {
+#  "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJkZWZhdWx0QGRlZmF1bHQiLCJyb2xlcyI6WyJhZG1pbiJdfSwiaWF0IjoxNTU0MTEzODM2LCJleHAiOjE1NTQ3MTg2MzZ9.S9Ijva49dkju5nFx-tEoCJpfu04wjve6wUD8Pcc0bPA"
+# }

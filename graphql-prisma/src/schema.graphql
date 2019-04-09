@@ -1,14 +1,29 @@
+# import UserOrderByInput, PostOrderByInput, CommentOrderByInput,  from './generated/prisma.graphql'
+
 type Query {
   me: User!
-  users(query: String): [User]!
-  posts(query: String): [Post]!
-  comments: [Comment]!
+  myPosts(query: String, orderBy: PostOrderByInput): [Post]!
+  users(
+    query: String
+    first: Int
+    skip: Int
+    orderBy: UserOrderByInput # it is enum that imported from generated prisma.graphql due to not typing all the options
+  ): [User]! #first and second will be pagination
+  posts(
+    query: String
+    first: Int
+    skip: Int
+    orderBy: PostOrderByInput
+  ): [Post]!
+  comments(query: String, orderBy: CommentOrderByInput): [Comment]!
+  post(id: ID!): Post!
 }
 
 type Mutation {
-  createUser(data: CreateUserInput): User!
-  deleteUser(id: ID!): User!
-  updateUser(id: ID!, data: UpdateUserInput!): User!
+  login(data: LoginUserInput!): AuthPayload!
+  createUser(data: CreateUserInput): AuthPayload!
+  deleteUser: User! # deleted (id: ID!) arg after using jwt
+  updateUser(data: UpdateUserInput!): User! # deleted id: ID! after using jwt
   createPost(post: CreatePostInput): Post!
   deletePost(id: ID!): Post!
   updatePost(id: ID!, data: UpdatePostInput!): Post!
@@ -21,17 +36,30 @@ type Subscription {
   count: Int!
   comment(postId: ID!): CommentSubscriptionPayload!
   post: PostSubscriptionPayload!
+  myPost: PostSubscriptionPayload!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
 }
 
 input CreateUserInput {
   name: String!
   email: String!
+  password: String!
   age: Int
 }
 
 input UpdateUserInput {
   name: String
   email: String
+  password: String
   age: Int
 }
 
@@ -39,7 +67,7 @@ input CreatePostInput {
   title: String!
   body: String!
   published: Boolean
-  author_id: ID!
+  # removed author_id: ID! after using authenticated userId
 }
 
 input UpdatePostInput {
@@ -50,7 +78,7 @@ input UpdatePostInput {
 
 input CreateCommentInput {
   text: String!
-  author_id: ID!
+  #  author_id: ID!
   post_id: ID!
 }
 
@@ -61,11 +89,12 @@ input updateCommentInput {
 type User {
   id: ID!
   name: String!
-  email: String!
-  age: Int
-  password: String!
-  posts: [Post]!
+  email: String
+  password: String! # added password, but prisma delete and add line 6 in .graphqlconfig due to update generated dir
+  posts: [Post]
   comments: [Comment]!
+  updatedAt: String!
+  createdAt: String!
 }
 
 type Post {
@@ -75,6 +104,8 @@ type Post {
   published: Boolean!
   author_id: User!
   comments: [Comment]!
+  updatedAt: String!
+  createdAt: String!
 }
 
 type Comment {
@@ -82,6 +113,8 @@ type Comment {
   text: String!
   author_id: User!
   post_id: Post!
+  updatedAt: String!
+  createdAt: String!
 }
 
 enum MutationType {
@@ -91,10 +124,10 @@ enum MutationType {
 }
 type PostSubscriptionPayload {
   mutation: MutationType!
-  data: Post!
+  node: Post # changes made as well
 }
 
 type CommentSubscriptionPayload {
   mutation: MutationType!
-  data: Comment!
+  node: Comment # later on changed data -> node, prisma sends subscribed data called as node
 }
